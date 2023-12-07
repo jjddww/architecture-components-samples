@@ -61,11 +61,11 @@ public class ProductListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final ProductListViewModel viewModel =
-                new ViewModelProvider(this).get(ProductListViewModel.class);
+                new ViewModelProvider(this).get(ProductListViewModel.class); //상품 리스트에 표출할 데이터를 갖는 ViewModel 생성
 
-        mBinding.productsSearchBtn.setOnClickListener(v -> {
-            Editable query = mBinding.productsSearchBox.getText();
-            viewModel.setQuery(query);
+        mBinding.productsSearchBtn.setOnClickListener(v -> { //검색 버튼을 누름
+            Editable query = mBinding.productsSearchBox.getText(); //검색창에 쓴 텍스트를 가져옴
+            viewModel.setQuery(query); //ViewModel의 SaveStateHandle에 저장
         });
 
         subscribeUi(viewModel.getProducts());
