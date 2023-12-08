@@ -68,21 +68,21 @@ public class ProductListFragment extends Fragment {
             viewModel.setQuery(query); //ViewModel의 SaveStateHandle에 저장
         });
 
-        subscribeUi(viewModel.getProducts());
+        subscribeUi(viewModel.getProducts()); // 뷰모델에서 livedata를 받아서 전달
     }
 
     private void subscribeUi(LiveData<List<ProductEntity>> liveData) {
         // Update the list when the data changes
-        liveData.observe(getViewLifecycleOwner(), myProducts -> {
+        liveData.observe(getViewLifecycleOwner(), myProducts -> { //liveData 관찰
             if (myProducts != null) {
-                mBinding.setIsLoading(false);
-                mProductAdapter.setProductList(myProducts);
+                mBinding.setIsLoading(false); //데이터바인딩 isLoading 변수값 설정
+                mProductAdapter.setProductList(myProducts); //liveData 값 어댑터에 넘겨서 리스트 데이터 설정
             } else {
                 mBinding.setIsLoading(true);
             }
             // espresso does not know how to wait for data binding's loop so we execute changes
             // sync.
-            mBinding.executePendingBindings();
+            mBinding.executePendingBindings(); //데이터변경이 즉각적으로 일어나도록함.
         });
     }
 
@@ -94,8 +94,8 @@ public class ProductListFragment extends Fragment {
     }
 
     private final ProductClickCallback mProductClickCallback = product -> {
-        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-            ((MainActivity) requireActivity()).show(product);
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) { //STARTED 상태일 때
+            ((MainActivity) requireActivity()).show(product); //ProductFragment를 띄우는 함수 호출
         }
     };
 }

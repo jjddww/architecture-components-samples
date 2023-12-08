@@ -32,10 +32,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
+import kotlin.jvm.functions.Function1;
+
 public class ProductListViewModel extends AndroidViewModel {
     private static final String QUERY_KEY = "QUERY";
 
-    private final SavedStateHandle mSavedStateHandler;
+    private final SavedStateHandle mSavedStateHandler; //뷰모델 상태를 저장하는 SaveStateHandle
     private final DataRepository mRepository;
     private final LiveData<List<ProductEntity>> mProducts;
 
@@ -44,14 +46,14 @@ public class ProductListViewModel extends AndroidViewModel {
         super(application);
         mSavedStateHandler = savedStateHandle;
 
-        mRepository = ((BasicApp) application).getRepository();
+        mRepository = ((BasicApp) application).getRepository(); //BasicApp을 통해 리포지토리 싱글톤에 액세스
 
         // Use the savedStateHandle.getLiveData() as the input to switchMap,
         // allowing us to recalculate what LiveData to get from the DataRepository
         // based on what query the user has entered
         mProducts = Transformations.switchMap(
                 savedStateHandle.getLiveData("QUERY", null),
-                (Function<CharSequence, LiveData<List<ProductEntity>>>) query -> {
+                (Function1<CharSequence, LiveData<List<ProductEntity>>>) query -> {
                     if (TextUtils.isEmpty(query)) {
                         return mRepository.getProducts();
                     }
