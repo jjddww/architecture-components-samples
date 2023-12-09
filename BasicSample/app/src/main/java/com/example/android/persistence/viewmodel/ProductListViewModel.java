@@ -26,7 +26,6 @@ import com.example.android.persistence.db.entity.ProductEntity;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
@@ -52,12 +51,12 @@ public class ProductListViewModel extends AndroidViewModel {
         // allowing us to recalculate what LiveData to get from the DataRepository
         // based on what query the user has entered
         mProducts = Transformations.switchMap(
-                savedStateHandle.getLiveData("QUERY", null),
-                (Function1<CharSequence, LiveData<List<ProductEntity>>>) query -> {
-                    if (TextUtils.isEmpty(query)) {
-                        return mRepository.getProducts();
+                savedStateHandle.getLiveData("QUERY", null), //SaveStateHandle에 저장된 LiveData가 switchMap의 두번째 파라미터에 반영됨
+                (Function1<CharSequence, LiveData<List<ProductEntity>>>) query -> { //사용자 쿼리에 따라 LiveData를 가져올 수 있음.
+                    if (TextUtils.isEmpty(query)) { //쿼리가 비어있으면
+                        return mRepository.getProducts(); //상품리스트 모두 가져오기
                     }
-                    return mRepository.searchProducts("*" + query + "*");
+                    return mRepository.searchProducts("*" + query + "*"); //쿼리가 비어있지 않으면 검색한 상품만 가져오기
                 });
     }
 
@@ -65,13 +64,13 @@ public class ProductListViewModel extends AndroidViewModel {
         // Save the user's query into the SavedStateHandle.
         // This ensures that we retain the value across process death
         // and is used as the input into the Transformations.switchMap above
-        mSavedStateHandler.set(QUERY_KEY, query);
+        mSavedStateHandler.set(QUERY_KEY, query); //SaveStateHandle에 쿼리 저장
     }
 
     /**
      * Expose the LiveData Products query so the UI can observe it.
      */
-    public LiveData<List<ProductEntity>> getProducts() {
+    public LiveData<List<ProductEntity>> getProducts() { //ProductListFragment에서 호출함
         return mProducts;
     }
 }

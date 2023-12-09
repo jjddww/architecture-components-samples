@@ -59,9 +59,11 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    namespace 'com.example.android.persistence'
 }
 
 dependencies {
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     implementation deps.app_compat
     implementation deps.fragment.runtime
     implementation deps.material
