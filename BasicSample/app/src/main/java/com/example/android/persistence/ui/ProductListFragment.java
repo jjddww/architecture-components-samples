@@ -93,7 +93,7 @@ public class ProductListFragment extends Fragment {
         super.onDestroyView();
     }
 
-    private final ProductClickCallback mProductClickCallback = product -> {
+    private final ProductClickCallback mProductClickCallback = product -> { //ProductClickCallback 인터페이스의 onClick 메소드 구현
         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) { //STARTED 상태일 때
             ((MainActivity) requireActivity()).show(product); //ProductFragment를 띄우는 함수 호출
         }

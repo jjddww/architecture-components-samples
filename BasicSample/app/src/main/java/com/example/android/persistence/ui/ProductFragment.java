@@ -48,7 +48,7 @@ public class ProductFragment extends Fragment {
 
         // Create and set the adapter for the RecyclerView.
         mCommentAdapter = new CommentAdapter(mCommentClickCallback);
-        mBinding.commentList.setAdapter(mCommentAdapter);
+        mBinding.commentList.setAdapter(mCommentAdapter); //어댑터 부착
         return mBinding.getRoot();
     }
 
@@ -64,7 +64,9 @@ public class ProductFragment extends Fragment {
         final ProductViewModel model = new ViewModelProvider(this, factory)
                 .get(ProductViewModel.class);
 
-        mBinding.setLifecycleOwner(getViewLifecycleOwner());
+        mBinding.setLifecycleOwner(getViewLifecycleOwner());//바인딩에서 LiveData의 변경 사항을 관찰하는 데 사용해야 하는 LifecycleOwner를 설정
+        //LiveData가 바인딩 표현식 중 하나에 있고 LifecycleOwner가 설정되지 않은 경우 LiveData가 관찰되지 않으며 이에 대한 업데이트가 UI에 전파되지 않음.
+        //product_fragment에 ProductViewModel이 있으므로 설정해줘야하는 것으로 추측
         mBinding.setProductViewModel(model);
 
         subscribeToModel(model);
@@ -90,7 +92,7 @@ public class ProductFragment extends Fragment {
     }
 
     /** Creates product fragment for specific product ID */
-    public static ProductFragment forProduct(int productId) {
+    public static ProductFragment forProduct(int productId) { //상품 id를 가진 프래그먼트 생성하여 반환
         ProductFragment fragment = new ProductFragment();
         Bundle args = new Bundle();
         args.putInt(KEY_PRODUCT_ID, productId);

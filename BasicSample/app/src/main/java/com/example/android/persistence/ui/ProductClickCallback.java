@@ -18,6 +18,6 @@ package com.example.android.persistence.ui;
 
 import com.example.android.persistence.model.Product;
 
-public interface ProductClickCallback {
+public interface ProductClickCallback { //클릭 콜백 인터페이스
     void onClick(Product product);
 }
