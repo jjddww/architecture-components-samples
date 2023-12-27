@@ -32,29 +32,29 @@ import java.util.List;
 
 public class ProductViewModel extends AndroidViewModel {
 
-    private final LiveData<ProductEntity> mObservableProduct;
+    private final LiveData<ProductEntity> mObservableProduct; //상품 LiveData
 
     private final int mProductId;
 
-    private final LiveData<List<CommentEntity>> mObservableComments;
+    private final LiveData<List<CommentEntity>> mObservableComments; //댓글 LiveData
 
     public ProductViewModel(@NonNull Application application, DataRepository repository,
             final int productId) {
         super(application);
         mProductId = productId;
 
-        mObservableComments = repository.loadComments(mProductId);
-        mObservableProduct = repository.loadProduct(mProductId);
+        mObservableComments = repository.loadComments(mProductId); //dao를 이용해 database에서 댓글 불러오기
+        mObservableProduct = repository.loadProduct(mProductId); //dao를 이용해 상품 정보 불러오기
     }
 
     /**
      * Expose the LiveData Comments query so the UI can observe it.
      */
-    public LiveData<List<CommentEntity>> getComments() {
+    public LiveData<List<CommentEntity>> getComments() { //댓글 getter
         return mObservableComments;
     }
 
-    public LiveData<ProductEntity> getProduct() {
+    public LiveData<ProductEntity> getProduct() { //상품정보 getter
         return mObservableProduct;
     }
 
@@ -64,7 +64,7 @@ public class ProductViewModel extends AndroidViewModel {
      * This creator is to showcase how to inject dependencies into ViewModels. It's not
      * actually necessary in this case, as the product ID can be passed in a public method.
      */
-    public static class Factory extends ViewModelProvider.NewInstanceFactory {
+    public static class Factory extends ViewModelProvider.NewInstanceFactory { //종속성을 주입하는 것을 보여주는 예시
 
         @NonNull
         private final Application mApplication;

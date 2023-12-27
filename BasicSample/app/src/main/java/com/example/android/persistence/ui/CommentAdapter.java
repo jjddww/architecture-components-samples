@@ -32,6 +32,8 @@ import com.example.android.persistence.db.entity.CommentEntity;
 import com.example.android.persistence.R;
 
 public class CommentAdapter extends ListAdapter<CommentEntity, CommentAdapter.CommentViewHolder> {
+//AsyncListDiffer는 DiffUtil을 더 편하게 쓰기 위한 클래스이며, ListAdapter는 AsyncListDiffer를 편하게 쓰기 위해 랩핑한 클래스
+    //submitList 사용 가능.
 
     @Nullable
     private final CommentClickCallback mCommentClickCallback;
@@ -41,7 +43,7 @@ public class CommentAdapter extends ListAdapter<CommentEntity, CommentAdapter.Co
             @Override
             public boolean areItemsTheSame(@NonNull CommentEntity old,
                     @NonNull CommentEntity comment) {
-                return old.getId() == comment.getId();
+                return old.getId() == comment.getId(); //id 비교
             }
 
             @Override
@@ -62,13 +64,13 @@ public class CommentAdapter extends ListAdapter<CommentEntity, CommentAdapter.Co
         CommentItemBinding binding = DataBindingUtil
                 .inflate(LayoutInflater.from(parent.getContext()), R.layout.comment_item,
                         parent, false);
-        binding.setCallback(mCommentClickCallback);
+        binding.setCallback(mCommentClickCallback); //comment_item.xml의 callback 변수에 값 설정
         return new CommentViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        holder.binding.setComment(getItem(position));
+        holder.binding.setComment(getItem(position)); //comment_item.xml의 comment 변수에 값 설정
         holder.binding.executePendingBindings();
     }
 

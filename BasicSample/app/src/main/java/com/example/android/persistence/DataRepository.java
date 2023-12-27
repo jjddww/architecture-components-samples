@@ -17,11 +17,14 @@ public class DataRepository {
 
     private final AppDatabase mDatabase;
     private MediatorLiveData<List<ProductEntity>> mObservableProducts;
+    //MediatorLiveData는 여러 LiveData를 병합할 수 있도록 해주는 LiveData 하위 클래스
+    //네트워크 혹은 데이터베이스 데이터와 관련된 LiveData 객체를 추가할 수 있음.
 
     private DataRepository(final AppDatabase database) {
         mDatabase = database;
         mObservableProducts = new MediatorLiveData<>();
 
+        //addSource를 통해 observe할 LiveData와 수행할 로직을 추가하여 전달.
         mObservableProducts.addSource(mDatabase.productDao().loadAllProducts(),
                 productEntities -> {
                     if (mDatabase.getDatabaseCreated().getValue() != null) {
@@ -30,7 +33,7 @@ public class DataRepository {
                 });
     }
 
-    public static DataRepository getInstance(final AppDatabase database) {
+    public static DataRepository getInstance(final AppDatabase database) { //싱글톤 패턴
         if (sInstance == null) {
             synchronized (DataRepository.class) {
                 if (sInstance == null) {

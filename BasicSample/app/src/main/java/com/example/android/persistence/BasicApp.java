@@ -22,7 +22,7 @@ import com.example.android.persistence.db.AppDatabase;
 /**
  * Android Application class. Used for accessing singletons.
  */
-public class BasicApp extends Application {
+public class BasicApp extends Application { //싱글톤 클래스에 접근할 때 사용하는 애플리케이션 클래스
 
     private AppExecutors mAppExecutors;
 

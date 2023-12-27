@@ -25,6 +25,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import com.example.android.persistence.AppExecutors;
@@ -52,7 +54,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
-    public static AppDatabase getInstance(final Context context, final AppExecutors executors) {
+    public static AppDatabase getInstance(final Context context, final AppExecutors executors) { //싱글톤
         if (sInstance == null) {
             synchronized (AppDatabase.class) {
                 if (sInstance == null) {
@@ -69,9 +71,9 @@ public abstract class AppDatabase extends RoomDatabase {
      * creates a new instance of the database.
      * The SQLite database is only created when it's accessed for the first time.
      */
-    private static AppDatabase buildDatabase(final Context appContext,
+    private static AppDatabase buildDatabase(final Context appContext, //데이터베이스 빌드
             final AppExecutors executors) {
-        return Room.databaseBuilder(appContext, AppDatabase.class, DATABASE_NAME)
+        return Room.databaseBuilder(appContext, AppDatabase.class, DATABASE_NAME) //Room 데이터베이스 빌더
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -81,12 +83,16 @@ public abstract class AppDatabase extends RoomDatabase {
                             addDelay();
                             // Generate the data for pre-population
                             AppDatabase database = AppDatabase.getInstance(appContext, executors);
+
+                            //DataGenerator 사용해서 데이터 generate.
                             List<ProductEntity> products = DataGenerator.generateProducts();
                             List<CommentEntity> comments =
                                     DataGenerator.generateCommentsForProducts(products);
 
                             insertData(database, products, comments);
                             // notify that the database was created and it's ready to be used
+                            //MutableLiveData postValue
+                            //PostValue는 백그라운드에서 실행, setValue는 메인 스레드에서 실행. 즉각적으로 값을 바꿔야한다면 setValue 사용.
                             database.setDatabaseCreated();
                         });
                     }
@@ -127,7 +133,7 @@ public abstract class AppDatabase extends RoomDatabase {
         return mIsDatabaseCreated;
     }
 
-    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) { //Room 데이터베이스 마이그레이션 - 버전1에서 버전2로
 
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
