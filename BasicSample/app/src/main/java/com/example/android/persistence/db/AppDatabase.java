@@ -41,7 +41,7 @@ import java.util.List;
 
 @Database(entities = {ProductEntity.class, ProductFtsEntity.class, CommentEntity.class}, version = 2)
 @TypeConverters(DateConverter.class)
-public abstract class AppDatabase extends RoomDatabase {
+public abstract class AppDatabase extends RoomDatabase { //데이터베이스 클래스 - RoomDatabase를 확장하는 추상클래스여야함.
 
     private static AppDatabase sInstance;
 
@@ -76,7 +76,7 @@ public abstract class AppDatabase extends RoomDatabase {
         return Room.databaseBuilder(appContext, AppDatabase.class, DATABASE_NAME) //Room 데이터베이스 빌더
                 .addCallback(new Callback() {
                     @Override
-                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                    public void onCreate(@NonNull SupportSQLiteDatabase db) { //최초실행시에만 실행됨
                         super.onCreate(db);
                         executors.diskIO().execute(() -> {
                             // Add a delay to simulate a long-running operation
@@ -129,7 +129,7 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     }
 
-    public LiveData<Boolean> getDatabaseCreated() {
+    public LiveData<Boolean> getDatabaseCreated() { //DataRepository에서 호출됨
         return mIsDatabaseCreated;
     }
 
